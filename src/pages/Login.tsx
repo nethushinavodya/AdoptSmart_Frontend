@@ -1,10 +1,11 @@
 import { useState, type FormEvent } from "react"
 import { getMyDetails, login } from "../services/auth"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate, Link, useLocation } from "react-router-dom"
 import { useAuth } from "../context/authContext"
 
 export default function Login() {
     const navigate = useNavigate()
+    const location = useLocation()
     const { setUser } = useAuth()
 
     const [email, setEmail] = useState("")
@@ -36,11 +37,19 @@ export default function Login() {
             const detail = await getMyDetails()
             setUser(detail.data)
 
-            navigate("/home")
+            const roles: string[] = detail.data?.role || []
+            const isAdmin = roles.includes("admin")
+
+            if (isAdmin) {
+                navigate("/admin/dashboard", { replace: true })
+            } else {
+                const from = (location.state as any)?.from || "/home"
+                navigate(from, { replace: true })
+            }
         } catch (err: any) {
             console.error(err)
-            if (err.message?.includes("Unable to connect to the server")) {
-                setError("Cannot connect to server. Please make sure the backend is running at http://localhost:5000")
+            if (err.message?.includes("Unable to connect to the server") || err?.code === "ERR_NETWORK") {
+                setError("Cannot connect to server. Please make sure the backend is running.")
             } else {
                 setError(err?.response?.data?.message || "Login error. Please try again.")
             }
