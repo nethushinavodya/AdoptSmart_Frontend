@@ -12,6 +12,7 @@ const SuccessStory = lazy(() => import("../pages/SuccessStory.tsx"))
 const AddPetPost = lazy(() => import("../pages/AddPetPost.tsx"))
 const AddSuccessStory = lazy(() => import("../pages/AddSuccessStory.tsx"))
 const UserProfile = lazy(() => import("../pages/UserProfile.tsx"))
+const Admin = lazy(() => import("../pages/Admin.tsx"))
 
 type RequireAuthTypes = { children: ReactNode; roles?: string[] }
 
@@ -31,7 +32,7 @@ const RequireAuth = ({ children, roles }: RequireAuthTypes) => {
         return <Navigate to="/login" replace state={{ from: location.pathname }} />
     }
 
-    if (roles && !roles.some((role) => user.roles?.includes(role))) {
+    if (roles && !roles.some((role) => (user.role || []).includes(role))) {
         return (
             <div className="text-center py-20">
                 <h2 className="text-xl font-bold mb-2">Access denied</h2>
@@ -81,6 +82,15 @@ export default function Router() {
                         <Route path="/add-pet" element={<AddPetPost />} />
                         <Route path="/profile" element={<UserProfile />} />
                     </Route>
+
+                    <Route
+                        path="/admin/dashboard"
+                        element={
+                            <RequireAuth roles={["admin"]}>
+                                <Admin />
+                            </RequireAuth>
+                        }
+                    />
                 </Routes>
             </Suspense>
         </BrowserRouter>
