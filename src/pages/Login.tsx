@@ -43,8 +43,9 @@ export default function Login() {
             if (isAdmin) {
                 navigate("/admin/dashboard", { replace: true })
             } else {
-                const from = (location.state as any)?.from || "/home"
-                navigate(from, { replace: true })
+                const from = (location.state as any)?.from
+                const safePath = from?.startsWith('/admin') ? '/home' : (from || '/home')
+                navigate(safePath, { replace: true })
             }
         } catch (err: any) {
             console.error(err)

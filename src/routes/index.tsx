@@ -32,13 +32,15 @@ const RequireAuth = ({ children, roles }: RequireAuthTypes) => {
         return <Navigate to="/login" replace state={{ from: location.pathname }} />
     }
 
+    // Check if user is admin
+    const isAdmin = (user.role || []).includes("admin")
+
     if (roles && !roles.some((role) => (user.role || []).includes(role))) {
-        return (
-            <div className="text-center py-20">
-                <h2 className="text-xl font-bold mb-2">Access denied</h2>
-                <p>You do not have permission to view this page.</p>
-            </div>
-        )
+        return <Navigate to="/home" replace />
+    }
+
+    if (!roles && isAdmin) {
+        return <Navigate to="/admin/dashboard" replace />
     }
 
     return <>{children}</>
