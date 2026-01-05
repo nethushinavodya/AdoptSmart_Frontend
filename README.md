@@ -48,8 +48,7 @@ A full-stack pet adoption platform connecting users with adoptable pets. Users c
 ## 📷 Screenshots
 
 ### Homepage
-![Homepage](<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/384c4519-8d86-4e0d-a14a-50bdf6232486" />
-)
+![Homepage](https://github.com/user-attachments/assets/384c4519-8d86-4e0d-a14a-50bdf6232486)
 
 ### Pets Catalogue
 ![Pets Catalogue](<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/659a5203-cfc3-4195-bda5-a24680312219" />
