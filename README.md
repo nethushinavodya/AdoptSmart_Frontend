@@ -51,19 +51,15 @@ A full-stack pet adoption platform connecting users with adoptable pets. Users c
 ![Homepage](https://github.com/user-attachments/assets/384c4519-8d86-4e0d-a14a-50bdf6232486)
 
 ### Pets Catalogue
-![Pets Catalogue](<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/659a5203-cfc3-4195-bda5-a24680312219" />
-)
+![Pets Catalogue](https://github.com/user-attachments/assets/659a5203-cfc3-4195-bda5-a24680312219)
 
 ### Login / Signup
-![Login Page](<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b192f1bc-ab69-4a01-a4ce-4a9fee12a893" />
-)
-![Signup Page](<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/88d10e55-083d-4d08-81bd-5f48f5bac0de" />
-)
+![Login Page](https://github.com/user-attachments/assets/b192f1bc-ab69-4a01-a4ce-4a9fee12a893")
+
+![Signup Page](https://github.com/user-attachments/assets/88d10e55-083d-4d08-81bd-5f48f5bac0de)
 
 ### Success Stories
-![Success Stories Page](<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f55697c7-1df3-449c-b696-b6cb1896799d" />
-)
+![Success Stories Page](https://github.com/user-attachments/assets/f55697c7-1df3-449c-b696-b6cb1896799d)
 
 ### Ai Chat
-![Ai Chat Page](<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/55eddf5e-0c8b-4ae7-afa5-a3a0cc07fce2" />
-)
+![Ai Chat Page](https://github.com/user-attachments/assets/55eddf5e-0c8b-4ae7-afa5-a3a0cc07fce2)
