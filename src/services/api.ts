@@ -3,12 +3,9 @@
 // api.ts
 import axios, { AxiosError } from "axios"
 import { refreshTokens } from "./auth"
-import dotenv from "dotenv"
-dotenv.config()
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 const api = axios.create({
-  baseURL: API_BASE_URL + "/api/v1",
+  baseURL: "https://adoptsmartbackend-production.up.railway.app/api/v1",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
