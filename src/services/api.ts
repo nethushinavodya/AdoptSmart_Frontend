@@ -1,11 +1,11 @@
-// axiosConfig.ts
-// apiService.ts
-// api.ts
 import axios, { AxiosError } from "axios"
 import { refreshTokens } from "./auth"
+import dotenv from 'dotenv';
+dotenv.config();
 
+const base = (process.env.REACT_APP_API_BASE_URL || "").replace(/\/+$/, "")
 const api = axios.create({
-  baseURL: "http://localhost:5000/api/v1",
+  baseURL: base + "/api/v1",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
