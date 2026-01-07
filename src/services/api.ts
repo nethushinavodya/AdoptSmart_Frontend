@@ -1,11 +1,8 @@
 import axios, { AxiosError } from "axios"
 import { refreshTokens } from "./auth"
-import dotenv from "dotenv"
-dotenv.config()
 
-const API_BASE_URL = process.env.VITE_API_BASE_URL || "/api/v1"
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: "https://selfless-patience-production-bdf1.up.railway.app/api/v1",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
