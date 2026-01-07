@@ -1,11 +1,14 @@
+// axiosConfig.ts
+// apiService.ts
+// api.ts
 import axios, { AxiosError } from "axios"
 import { refreshTokens } from "./auth"
-import dotenv from 'dotenv';
-dotenv.config();
+import dotenv from "dotenv"
+dotenv.config()
 
-const base = (process.env.REACT_APP_API_BASE_URL || "").replace(/\/+$/, "")
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 const api = axios.create({
-  baseURL: base + "/api/v1",
+  baseURL: API_BASE_URL + "/api/v1",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
@@ -17,10 +20,13 @@ const PUBLIC_ENDPOINTS = ["/auth/login", "/auth/register"]
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken")
-    const isPublic = PUBLIC_ENDPOINTS.some((url) => config.url?.includes(url))
+    const url = config.url || ""
+    const isPublic = PUBLIC_ENDPOINTS.some((u) => url.includes(u))
 
     if (token && !isPublic) {
-      config.headers.Authorization = `Bearer ${token}`
+      config.headers = config.headers || {}
+      // allow TS to set header on possibly unknown headers shape
+      ;(config.headers as any).Authorization = `Bearer ${token}`
     }
 
     return config
@@ -34,28 +40,38 @@ api.interceptors.response.use(
   (response) => {
     return response
   },
-  async (err: AxiosError) => {
-    const originalRequest: any = err.config
+  async (err: AxiosError | any) => {
+    const originalRequest: any = err?.config || {}
 
-    if (err.message === "Network Error") {
-      console.error("Network Error: Unable to connect to the server. Please check if the backend is running.")
-      return Promise.reject(new Error("Unable to connect to the server. Please ensure the backend is running at " + api.defaults.baseURL))
+    // Network / no-response case
+    if (!err.response) {
+      console.error(
+        "Network Error: Unable to connect to the server. Please check if the backend is running."
+      )
+      return Promise.reject(
+        new Error(
+          "Unable to connect to the server. Please ensure the backend is running at " +
+            api.defaults.baseURL
+        )
+      )
     }
 
-    const isPublic = PUBLIC_ENDPOINTS.some((url) =>
-      originalRequest?.url?.includes(url)
+    const isPublic = PUBLIC_ENDPOINTS.some((u) =>
+      originalRequest?.url?.includes(u)
     )
 
     if (err.response?.status === 401 && !isPublic && !originalRequest._retry) {
       originalRequest._retry = true
       try {
         const refreshToken = localStorage.getItem("refreshToken")
-        if (!refreshToken) {
-          throw new Error("No refresh token available")
-        }
+        if (!refreshToken) throw new Error("No refresh token available")
+
         const res = await refreshTokens(refreshToken)
+        if (!res || !res.accessToken) throw new Error("Invalid refresh response")
+
         localStorage.setItem("accessToken", res.accessToken)
 
+        originalRequest.headers = originalRequest.headers || {}
         originalRequest.headers.Authorization = `Bearer ${res.accessToken}`
 
         return axios(originalRequest)
@@ -67,6 +83,7 @@ api.interceptors.response.use(
         return Promise.reject(error)
       }
     }
+
     return Promise.reject(err)
   }
 )
