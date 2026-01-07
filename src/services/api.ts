@@ -1,15 +1,8 @@
-// axiosConfig.ts
-// apiService.ts
-// api.ts
 import axios, { AxiosError } from "axios"
 import { refreshTokens } from "./auth"
-import dotenv from "dotenv";
-dotenv.config();
 
-const base = (process.env.REACT_APP_API_BASE_URL || "https://adoptsmartbackend-production.up.railway.app")
-  .replace(/\/+$/, "")
 const api = axios.create({
-  baseURL: base + "/api/v1",
+  baseURL: "http://localhost:5000/api/v1",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
@@ -20,15 +13,13 @@ const PUBLIC_ENDPOINTS = ["/auth/login", "/auth/register"]
 
 api.interceptors.request.use(
   (config) => {
-    // guard config and headers to avoid runtime errors
-    config = config || {}
-    config.headers = config.headers || {}
-
     const token = localStorage.getItem("accessToken")
     const url = config.url || ""
     const isPublic = PUBLIC_ENDPOINTS.some((u) => url.includes(u))
 
     if (token && !isPublic) {
+      config.headers = config.headers || {}
+      // allow TS to set header on possibly unknown headers shape
       ;(config.headers as any).Authorization = `Bearer ${token}`
     }
 
@@ -40,21 +31,27 @@ api.interceptors.request.use(
 )
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    return response
+  },
   async (err: AxiosError | any) => {
     const originalRequest: any = err?.config || {}
 
     // Network / no-response case
-    if (!err?.response) {
-      // Provide clearer guidance when server is unreachable (could be backend down or DB failure)
-      const msg =
-        "Network Error: Unable to connect to the server. Check backend is running and DB (MongoDB Atlas) allows connections from your host. See backend logs for MongooseServerSelectionError."
-      console.error(msg, err?.message || err)
-      return Promise.reject(new Error(msg))
+    if (!err.response) {
+      console.error(
+        "Network Error: Unable to connect to the server. Please check if the backend is running."
+      )
+      return Promise.reject(
+        new Error(
+          "Unable to connect to the server. Please ensure the backend is running at " +
+            api.defaults.baseURL
+        )
+      )
     }
 
     const isPublic = PUBLIC_ENDPOINTS.some((u) =>
-      (originalRequest?.url || "").includes(u)
+      originalRequest?.url?.includes(u)
     )
 
     if (err.response?.status === 401 && !isPublic && !originalRequest._retry) {
