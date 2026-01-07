@@ -1,8 +1,11 @@
 import axios, { AxiosError } from "axios"
 import { refreshTokens } from "./auth"
+import dotenv from "dotenv"
+dotenv.config()
 
+const API_BASE_URL = process.env.VITE_API_BASE_URL || "/api/v1"
 const api = axios.create({
-  baseURL: "http://localhost:5000/api/v1",
+  baseURL: API_BASE_URL,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
