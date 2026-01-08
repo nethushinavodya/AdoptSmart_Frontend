@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios"
 import { refreshTokens } from "./auth"
 
 const api = axios.create({
-  baseURL: "https://adoptsmartbackend-production.up.railway.app/api/v1",
+  baseURL: "https://adoptsmartbackend-production-3720.up.railway.app/api/v1",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
